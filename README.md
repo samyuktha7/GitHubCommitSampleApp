@@ -6,10 +6,6 @@ Usage:
 2. Click Get Commits button to see list of recent commits from the master branch
 3. The commit list fetches commits in batches of 30, and automatically fetches a new set of commits as you scroll to the bottom of the list.
 
-TODO Improvements:
-
-Click on an individual commit to see more commit info such as diff, entire commit message, etc
-
 This Application is in MVVM Architecture - has one Main Activity which has two Fragments
 1. RepoInputFragment
   Take GitHub username and Repository name and clicking on getCommits button validates the input and fetches the api response from the REST API using Retrofit API service.
@@ -29,3 +25,7 @@ This Application is in MVVM Architecture - has one Main Activity which has two F
   RecyclerView
   Activities, Fragments
   ConstraintLayout, FrameLayout
+
+TODO Improvements:
+
+Click on an individual commit to see more commit info such as diff, entire commit message, etc
