@@ -19,42 +19,54 @@ import retrofit2.Response;
 public class MainViewModel extends ViewModel {
 
     private final retrofitApiService apiService;
-    MutableLiveData<ApiResponse> apiResponse = new MutableLiveData<>();
+    MutableLiveData<ApiResponse> apiResponse;
     private String userName;
     private String repoName;
+    private static final String TAG = "MainViewModel";
 
     @Inject
     public MainViewModel(retrofitApiService apiService) {
         this.apiService = apiService;
     }
 
-    MutableLiveData<ApiResponse> getCommitsList() {
-        initNetworkCall();
+    MutableLiveData<ApiResponse> getResponse(String userName, String repoName) {
+        if(this.userName == null || !this.userName.equals(userName) || this.repoName == null  || !this.repoName.equals(repoName) || apiResponse == null) {
+            this.userName = userName;
+            this.repoName = repoName;
+            Log.d("TAG", "getResponse - parameters");
+            initNetworkCall();
+        }
         return apiResponse;
     }
 
-    public void setData(String userName, String repoName) {
-        this.userName = userName;
-        this.repoName = repoName;
+    MutableLiveData<ApiResponse> getResponse() {
+        Log.d("TAG", "getResponse");
+        if(apiResponse == null) initNetworkCall();
+        return apiResponse;
     }
 
     private void initNetworkCall() {
+        Log.d(TAG, "initNetworkCall()");
+
+        apiResponse = new MutableLiveData<>();
         Call<List<GitHubCommit>> list = apiService.getUserGithubCommits(userName, repoName);
         list.enqueue(new Callback<List<GitHubCommit>>() {
             @Override
             public void onResponse(Call<List<GitHubCommit>> call, Response<List<GitHubCommit>> response) {
-                apiResponse.setValue(new ApiResponse(response.body()));
+                if(response.body() == null) {
+                    apiResponse.setValue(new ApiResponse("Not found"));
+                } else {
+                    apiResponse.setValue(new ApiResponse(response.body()));
+                }
             }
 
             @Override
             public void onFailure(Call<List<GitHubCommit>> call, Throwable t) {
+                Log.d(TAG, "onFailure");
                 apiResponse.setValue(new ApiResponse(t.getMessage()));            }
         });
     }
 
-    private boolean validate(String userName, String repoName) {
-        // TO-DO
-        return true;
-    }
+
 
 }

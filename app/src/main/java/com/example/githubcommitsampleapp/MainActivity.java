@@ -15,6 +15,6 @@ public class MainActivity extends BaseActivity {
 
         //Adding RepoInputFragment as initial fragment
         RepoInputFragment firsFragment = new RepoInputFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.FragmentContainer,firsFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.FragmentContainer,firsFragment).commit();
     }
 }
