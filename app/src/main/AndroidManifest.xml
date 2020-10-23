@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.githubcommitsampleapp">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".daggerbase.BaseApplication"
         android:allowBackup="true"
