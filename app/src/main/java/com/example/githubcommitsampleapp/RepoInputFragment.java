@@ -59,7 +59,7 @@ public class RepoInputFragment extends BaseFragment {
             }
 
             apiResponse.observe(getViewLifecycleOwner(), apiResponse -> {
-                if(apiResponse.getError() == null || apiResponse.getError().equals("null")) {
+                if(apiResponse.getError() == null) {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.FragmentContainer, new CommitListFragment()).commit();
                     fragmentTransaction.addToBackStack(null);

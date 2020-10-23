@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.githubcommitsampleapp.daggerbase.BaseFragment;
@@ -34,6 +35,7 @@ public class CommitListFragment extends BaseFragment {
     public MainViewModel viewModel;
     private RecyclerView recyclerView;
     private static final String TAG = CommitListFragment.class.getName();
+    public static MutableLiveData<Boolean> loadMore = new MutableLiveData<Boolean>();
 
     public CommitListFragment() {
         // Required empty public constructor
@@ -44,6 +46,7 @@ public class CommitListFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_commit_list, container, false);
+        loadMore.observe(getViewLifecycleOwner(), loadObserver);
         recyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
@@ -58,11 +61,22 @@ public class CommitListFragment extends BaseFragment {
         apiResponse.observe(getViewLifecycleOwner(), observer);
     }
 
+    Observer<Boolean> loadObserver = loadMore -> {
+        boolean load = loadMore;
+        Log.d(TAG, "changedValue");
+        if(load) {
+            viewModel.fetchMoreData();
+        }
+    };
+
     Observer<ApiResponse> observer = apiResponse -> {
         List<GitHubCommit> commitsList = apiResponse.getCommits();
         if(commitsList != null) {
             RecyclerViewAdapter adapter = new RecyclerViewAdapter(commitsList);
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            if(commitsList.size() < 25) loadMore.setValue(false);
         } else {
             Log.e(TAG, "Error : "+apiResponse.getError());
         }
@@ -73,10 +87,15 @@ public class CommitListFragment extends BaseFragment {
 
         RecyclerViewAdapter(List<GitHubCommit> commitList) {
             this.commitsList = commitList;
+            loadMore.setValue(false);
         }
 
         @Override
         public int getItemViewType(int position) {
+            if(position == 29) {
+                Log.d(TAG, "end of the screen");
+                loadMore.setValue(true);
+            }
             return super.getItemViewType(position);
         }
 
