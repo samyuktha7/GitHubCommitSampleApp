@@ -26,7 +26,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-
 public class CommitListFragment extends BaseFragment {
 
     @Inject
@@ -35,7 +34,7 @@ public class CommitListFragment extends BaseFragment {
     public MainViewModel viewModel;
     private RecyclerView recyclerView;
     private static final String TAG = CommitListFragment.class.getName();
-    public static MutableLiveData<Boolean> loadMore = new MutableLiveData<Boolean>();
+    public static MutableLiveData<Boolean> loadMore = new MutableLiveData<>();
 
     public CommitListFragment() {
         // Required empty public constructor
@@ -47,7 +46,7 @@ public class CommitListFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_commit_list, container, false);
         loadMore.observe(getViewLifecycleOwner(), loadObserver);
-        recyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         return v;
@@ -56,29 +55,27 @@ public class CommitListFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel.class);
-
         MutableLiveData<ApiResponse> apiResponse = viewModel.getResponse();
         apiResponse.observe(getViewLifecycleOwner(), observer);
     }
 
     Observer<Boolean> loadObserver = loadMore -> {
         boolean load = loadMore;
-        Log.d(TAG, "changedValue");
-        if(load) {
+        Log.d(TAG, "changedValue " + load);
+        if (load) {
             viewModel.fetchMoreData();
         }
     };
 
     Observer<ApiResponse> observer = apiResponse -> {
         List<GitHubCommit> commitsList = apiResponse.getCommits();
-        if(commitsList != null) {
+        if (commitsList != null) {
             RecyclerViewAdapter adapter = new RecyclerViewAdapter(commitsList);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-
-            if(commitsList.size() < 25) loadMore.setValue(false);
+            if (commitsList.size() < 25) loadMore.setValue(false);
         } else {
-            Log.e(TAG, "Error : "+apiResponse.getError());
+            Log.e(TAG, "Error : " + apiResponse.getError());
         }
     };
 
@@ -92,7 +89,7 @@ public class CommitListFragment extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if(position == 29) {
+            if (position == 29) {
                 Log.d(TAG, "end of the screen");
                 loadMore.setValue(true);
             }
@@ -102,7 +99,7 @@ public class CommitListFragment extends BaseFragment {
         @NonNull
         @Override
         public Mainview onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_each, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_each, parent, false);
             return new Mainview(v);
         }
 
@@ -127,12 +124,10 @@ public class CommitListFragment extends BaseFragment {
 
             public Mainview(View itemView) {
                 super(itemView);
-                authorTextView = (TextView)itemView.findViewById(R.id.textView);
-                commitTextView = (TextView)itemView.findViewById(R.id.textView2);
+                authorTextView = (TextView) itemView.findViewById(R.id.textView);
+                commitTextView = (TextView) itemView.findViewById(R.id.textView2);
                 hashTextView = (TextView) itemView.findViewById(R.id.textView3);
             }
         }
     }
-
-
 }

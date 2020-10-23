@@ -15,5 +15,4 @@ public abstract class MainViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel.class)
     public abstract ViewModel bindViewModel(MainViewModel viewModel);
-
 }

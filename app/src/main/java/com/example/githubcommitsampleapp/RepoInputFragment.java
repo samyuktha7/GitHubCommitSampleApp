@@ -56,17 +56,16 @@ public class RepoInputFragment extends BaseFragment {
             String repoName = repositoryName.getText().toString();
             if(validate(gitHubUserName, repoName)) {
                 apiResponse = viewModel.getResponse(gitHubUserName, repoName);
+                apiResponse.observe(getViewLifecycleOwner(), apiResponse -> {
+                    if(apiResponse.getError() == null) {
+                        FragmentTransaction fragmentTransaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.FragmentContainer, new CommitListFragment()).commit();
+                        fragmentTransaction.addToBackStack(null);
+                    } else {
+                        showToast(apiResponse.getError());
+                    }
+                });
             }
-
-            apiResponse.observe(getViewLifecycleOwner(), apiResponse -> {
-                if(apiResponse.getError() == null) {
-                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.FragmentContainer, new CommitListFragment()).commit();
-                    fragmentTransaction.addToBackStack(null);
-                } else {
-                    showToast(apiResponse.getError());
-                }
-            });
         });
         return v;
     }

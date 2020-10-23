@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.githubcommitsampleapp.model.GitHubCommit;
-import com.example.githubcommitsampleapp.network.retrofitApiService;
+import com.example.githubcommitsampleapp.network.RetrofitApiService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import retrofit2.Response;
 
 public class MainViewModel extends ViewModel {
 
-    private final retrofitApiService apiService;
+    private final RetrofitApiService apiService;
     MutableLiveData<ApiResponse> apiResponse;
     private List<GitHubCommit> commitsList;
     private String userName;
@@ -27,7 +27,7 @@ public class MainViewModel extends ViewModel {
     private int page = 0;
 
     @Inject
-    public MainViewModel(retrofitApiService apiService) {
+    public MainViewModel(RetrofitApiService apiService) {
         this.apiService = apiService;
         commitsList = new ArrayList<>();
     }
@@ -57,10 +57,12 @@ public class MainViewModel extends ViewModel {
         list.enqueue(new Callback<List<GitHubCommit>>() {
             @Override
             public void onResponse(Call<List<GitHubCommit>> call, Response<List<GitHubCommit>> response) {
-                if(response.body() == null) {
+                Log.d(TAG, "onResponse");
+                List<GitHubCommit> commitList = response.body();
+                if(commitList == null) {
                     apiResponse.setValue(new ApiResponse("Not found"));
                 } else {
-                    commitsList.addAll(response.body());
+                    commitsList.addAll(commitList);
                     apiResponse.setValue(new ApiResponse(commitsList));
                 }
             }
@@ -77,5 +79,4 @@ public class MainViewModel extends ViewModel {
         page++;
         initNetworkCall(page);
     }
-
 }

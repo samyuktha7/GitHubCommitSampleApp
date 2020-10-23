@@ -3,7 +3,7 @@ package com.example.githubcommitsampleapp.di.modules;
 import android.content.Context;
 
 import com.example.githubcommitsampleapp.daggerbase.BaseApplication;
-import com.example.githubcommitsampleapp.network.retrofitApiService;
+import com.example.githubcommitsampleapp.network.RetrofitApiService;
 import com.example.githubcommitsampleapp.utils.Constants;
 
 import javax.inject.Singleton;
@@ -36,7 +36,7 @@ public class AppModule {
     }
 
     @Provides
-    static retrofitApiService provideRetrofitApiService(Retrofit retrofit) {
-        return retrofit.create(retrofitApiService.class);
+    static RetrofitApiService provideRetrofitApiService(Retrofit retrofit) {
+        return retrofit.create(RetrofitApiService.class);
     }
 }

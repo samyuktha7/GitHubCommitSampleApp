@@ -23,15 +23,7 @@ public class ApiResponse {
         return commits;
     }
 
-    public void setCommits(List<GitHubCommit> commits) {
-        this.commits = commits;
-    }
-
     public String getError() {
         return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
     }
 }

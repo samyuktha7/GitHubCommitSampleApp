@@ -14,15 +14,7 @@ public class Commit {
         return author;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }
