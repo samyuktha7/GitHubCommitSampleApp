@@ -12,7 +12,8 @@ Module to Build dependencies for Activities/Fragments
 public abstract class ActivityBuilderModule {
 
     @ContributesAndroidInjector(
-            modules = {MainViewModelModule.class,}
+            modules = {MainViewModelModule.class,
+                    MainActivityFragmentsBuilderModule.class,}
     )
     abstract MainActivity contributeMainActivity();
 }
