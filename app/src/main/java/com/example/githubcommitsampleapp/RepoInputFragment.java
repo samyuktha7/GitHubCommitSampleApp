@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.githubcommitsampleapp.daggerbase.BaseFragment;
 import com.example.githubcommitsampleapp.di.viewModels.ViewModelProviderFactory;
+import com.example.githubcommitsampleapp.utils.Constants;
 
 import java.util.Objects;
 
@@ -72,15 +73,15 @@ public class RepoInputFragment extends BaseFragment {
 
     private boolean validate(String gitHubUserName, String repository) {
         if(gitHubUserName.isEmpty() && repository.isEmpty()) {
-            showToast("Enter Input");
+            showToast(Constants.ENTER_INPUT);
             return false;
         }
         else if(gitHubUserName.isEmpty()) {
-            showToast("Enter Github Username");
+            showToast(Constants.ENTER_USERNAME);
             return false;
         }
         else if(repository.isEmpty()) {
-            showToast("Enter Repository name");
+            showToast(Constants.ENTER_REPOSITORY);
             return false;
         }
         else return true;

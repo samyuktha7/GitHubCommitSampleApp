@@ -2,6 +2,7 @@ package com.example.githubcommitsampleapp.di.modules;
 
 import android.content.Context;
 
+import com.example.githubcommitsampleapp.HandleNetworkCalls;
 import com.example.githubcommitsampleapp.daggerbase.BaseApplication;
 import com.example.githubcommitsampleapp.network.RetrofitApiService;
 import com.example.githubcommitsampleapp.utils.Constants;
@@ -38,5 +39,10 @@ public class AppModule {
     @Provides
     static RetrofitApiService provideRetrofitApiService(Retrofit retrofit) {
         return retrofit.create(RetrofitApiService.class);
+    }
+
+    @Provides
+    HandleNetworkCalls provideHandleNetworkCalls(RetrofitApiService apiService) {
+        return new HandleNetworkCalls(apiService);
     }
 }
