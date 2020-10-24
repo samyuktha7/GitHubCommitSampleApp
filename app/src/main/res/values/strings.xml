@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">GitHubCommitSampleApp</string>
+    <string name="repo">Repo</string>
+    <string name="github_repo">Github repo</string>
+    <string name="get_commits">GET COMMITS</string>
+    <string name="github_username">GitHub UserName</string>
 
 
 </resources>
